@@ -1,0 +1,30 @@
+.terraform/
+/scripts/.env.customer
+/infra/bootstrap-backend/terraform.tfvars
+/infra/devops-infra/terraform.tfvars
+
+# === C# / .NET build artifacts ===
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.csproj.user
+*.dbmdl
+*.pdb
+*.log
+*.vs/
+*.ncrunch*
+
+# === Terraform artifacts ===
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.backup
+*.tfplan
+
+# === Terraform secrets/vars ===
+*.tfvars
+*.tfvars.json
+secrets.auto.tfvars

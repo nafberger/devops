@@ -28,3 +28,4 @@ crash.log
 *.tfvars
 *.tfvars.json
 secrets.auto.tfvars
+infra/app-infra/.terraform.lock.hcl

@@ -1,0 +1,34 @@
+name: Deploy to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore dependencies
+      run: dotnet restore ./src/Azure-demo-app/Azure-demo-app.sln
+
+    - name: Build app
+      run: dotnet build ./src/Azure-demo-app/Azure-demo-app.sln --configuration Release --no-restore
+
+    - name: Publish app
+      run: dotnet publish ./src/Azure-demo-app/Azure-demo-app.sln --configuration Release --output ./publish --no-restore
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: my-helo-app
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ./publish

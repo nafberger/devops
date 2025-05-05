@@ -15,6 +15,11 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+# Define variables
+variables:
+  azureSubscription: 'terraform-sp-connection'
+  appName: 'my-helo-app' 
+
 steps:
 # Checkout the repository
 - checkout: self
@@ -41,7 +46,7 @@ steps:
     projects: 'src/Azure-demo-app/Azure-demo-app.sln'
     arguments: '--configuration Release --no-restore'
 
-# Run tests (if you have them)
+# Run tests (optional)
 - task: DotNetCoreCLI@2
   displayName: 'Run tests'
   inputs:
@@ -66,3 +71,11 @@ steps:
     pathToPublish: '$(Build.ArtifactStagingDirectory)/app'
     artifactName: 'azure-demo-app'
     publishLocation: 'Container'
+
+# Deploy to Azure App Service
+- task: AzureWebApp@1
+  displayName: 'Deploy to App Service'
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appName: '$(appName)'
+    package: '$(Build.ArtifactStagingDirectory)/app/**/*.zip'

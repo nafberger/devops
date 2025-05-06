@@ -1,4 +1,4 @@
-
+# Existing App Service Plan
 resource "azurerm_service_plan" "plan" {
   name                = "example-app-service-plan"
   location            = azurerm_resource_group.rg.location
@@ -6,6 +6,8 @@ resource "azurerm_service_plan" "plan" {
   os_type             = "Linux"
   sku_name            = "F1"
 }
+
+# Existing Linux Web App
 resource "azurerm_linux_web_app" "app" {
   name                = "my-helo-app"
   resource_group_name = azurerm_resource_group.rg.name
@@ -17,6 +19,12 @@ resource "azurerm_linux_web_app" "app" {
     application_stack {
       dotnet_version = "8.0"
     }
+  }
+
+  # Add Application Insights integration
+  app_settings = {
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.webapp.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.webapp.connection_string
   }
 }
 

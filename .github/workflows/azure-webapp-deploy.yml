@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -16,13 +17,13 @@ jobs:
         dotnet-version: '8.x'
 
     - name: Restore dependencies
-      run: dotnet restore ./src/Azure-demo-app/Azure-demo-app.csproj
+      run: dotnet restore ./src/Azure-demo-app/Azure-demo-app/Azure-demo-app.csproj
 
     - name: Build Web App
-      run: dotnet build ./src/Azure-demo-app/Azure-demo-app.csproj --configuration Release --no-restore
+      run: dotnet build ./src/Azure-demo-app/Azure-demo-app/Azure-demo-app.csproj --configuration Release --no-restore
 
     - name: Publish Web App
-      run: dotnet publish ./src/Azure-demo-app/Azure-demo-app.csproj --configuration Release --output ./publish/web --no-restore
+      run: dotnet publish ./src/Azure-demo-app/Azure-demo-app/Azure-demo-app.csproj --configuration Release --output ./publish/web --no-restore
 
     - name: Deploy Web App
       uses: azure/webapps-deploy@v2

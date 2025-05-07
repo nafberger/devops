@@ -27,3 +27,4 @@ variable "environment" {
 variable "project_name" {
   default = "my-helo-app"
 }
+

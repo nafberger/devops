@@ -45,5 +45,4 @@ variable "customer_name" {
 variable "region" {
   description = "Azure region where resources will be deployed"
   type        = string
-  default     = "eastus"
 }

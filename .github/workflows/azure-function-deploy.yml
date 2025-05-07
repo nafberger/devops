@@ -1,0 +1,33 @@
+name: Deploy Azure Function App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy-function:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore dependencies
+      run: dotnet restore ./FunctionApp/FunctionApp.csproj
+
+    - name: Build Function App
+      run: dotnet build ./FunctionApp/FunctionApp.csproj --configuration Release --no-restore
+
+    - name: Publish Function App
+      run: dotnet publish ./FunctionApp/FunctionApp.csproj --configuration Release --output ./publish/function --no-restore
+
+    - name: Deploy to Azure Function App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: my-helo-function
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        package: ./publish/function

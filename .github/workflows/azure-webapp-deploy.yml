@@ -23,7 +23,7 @@ jobs:
       run: dotnet build ./src/Azure-demo-app/Azure-demo-app.sln --configuration Release --no-restore
 
     - name: Publish Web App
-      run: dotnet publish ./src/Azure-demo-app/Azure-demo-app/azure-demo-app.csproj --configuration Release --output ./publish/web --no-restore
+      run: dotnet publish ./src/Azure-demo-app/Azure-demo-app/Azure-demo-app.csproj --configuration Release --output ./publish/web --no-restore
 
     - name: List published files
       run: ls -R ./publish/web

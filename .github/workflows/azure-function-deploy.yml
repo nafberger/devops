@@ -1,7 +1,7 @@
 name: Deploy Azure Function App
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   build-and-deploy-function:

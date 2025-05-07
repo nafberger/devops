@@ -17,13 +17,13 @@ jobs:
         dotnet-version: '8.x'
 
     - name: Restore dependencies
-      run: dotnet restore ./FunctionApp/FunctionApp.csproj
+      run: dotnet restore ./src/FunctionApp/FunctionApp/FunctionApp.csproj
 
     - name: Build Function App
-      run: dotnet build ./FunctionApp/FunctionApp.csproj --configuration Release --no-restore
+      run: dotnet build ./src/FunctionApp/FunctionApp/FunctionApp.csproj --configuration Release --no-restore
 
     - name: Publish Function App
-      run: dotnet publish ./FunctionApp/FunctionApp.csproj --configuration Release --output ./publish/function --no-restore
+      run: dotnet publish ./src/FunctionApp/FunctionApp/FunctionApp.csproj --configuration Release --output ./publish/function --no-restore
 
     - name: Deploy to Azure Function App
       uses: azure/webapps-deploy@v2

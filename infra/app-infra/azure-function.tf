@@ -31,7 +31,7 @@ resource "azurerm_windows_function_app" "function" {
   }
 
   app_settings = {
-    "FUNCTIONS_WORKER_RUNTIME"              = "dotnet-isolated"  # ✅ correct for .NET 6/7/8
+    "FUNCTIONS_WORKER_RUNTIME"              = "dotnet"  # ✅ correct for .NET 6/7/8
     "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.webapp.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.webapp.connection_string
     "WEBSITE_RUN_FROM_PACKAGE"              = "1"  # ✅ common for .NET isolated functions

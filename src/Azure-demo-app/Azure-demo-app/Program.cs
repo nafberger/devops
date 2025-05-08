@@ -1,3 +1,6 @@
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Application Insights for telemetry
@@ -15,12 +18,24 @@ app.MapGet("/error", async (IHttpClientFactory clientFactory) =>
 {
     try
     {
-        var client = clientFactory.CreateClient();
-        var functionUrl = "https://my-helo-function.azurewebsites.net/api/LogError?code=<your-function-key>";
+        var httpClient = clientFactory.CreateClient();
+
+        string keyVaultUrl = "https://ship-soft-kv.vault.azure.net/"; // Your Key Vault URL
+        string secretName = "MyHelloFunctionApp"; // The name of the secret in Key Vault
+
+        var credential = new DefaultAzureCredential();
+        var secretClient = new SecretClient(new Uri(keyVaultUrl), credential);
+
+        KeyVaultSecret secret = secretClient.GetSecret(secretName);
+        string functionKey = secret.Value; // The actual function key
+
+        // Step 2: Construct the function URL with the retrieved key
+        string functionUrl = $"https://my-hello-function.azurewebsites.net/api/LOGERROR?code={functionKey}";
+
         var errorDetails = new { ErrorCode = 500, Message = "Internal Server Error from /error endpoint" };
         var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(errorDetails), System.Text.Encoding.UTF8, "application/json");
 
-        var response = await client.PostAsync(functionUrl, content);
+        var response = await httpClient.PostAsync(functionUrl, content);
         if (!response.IsSuccessStatusCode)
         {
             app.Logger.LogError($"Failed to log error to Azure Function: {response.StatusCode}");

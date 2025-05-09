@@ -1,133 +1,117 @@
-# DevOps Project: Azure Infrastructure with Terraform and CI/CD Pipelines
+# DevOps Project: Azure Minimal API + Function with Full CI/CD and Monitoring
 
-Welcome to the **DevOps AzureDemoApp Project**!  
-This project demonstrates a **professional DevOps workflow** including:
+Welcome to the **Azure DevOps Demo Project**!  
+This project demonstrates a full-featured DevOps pipeline and infrastructure automation using:
 
-- Azure infrastructure deployment using **Terraform**
-- C# **.NET 8 minimal API application**
-- **Azure DevOps** pipeline
-- **GitHub Actions** workflow
-- **Remote state management** (Azure Blob Storage)
-- **Service Principal authentication**
-- Full **Infrastructure as Code (IaC)** best practices
+- Azure infrastructure provisioning with **Terraform**
+- A **.NET 8 Minimal API** application
+- A **serverless Azure Function** for custom logging
+- **CI/CD** using both **GitHub Actions** and **Azure DevOps**
+- Built-in **monitoring and alerting** using **Application Insights** and **Log Analytics**
 
 ---
 
 ## 🚀 Project Structure
 
 ```
-/app/                                - .NET 8 C# minimal API app
-/infra/                              - Terraform files for Azure infrastructure
-.azure-pipelines.yml                 - Azure DevOps pipeline
-.github/workflows/terraform.yml      - GitHub Actions workflow
-README.md                            - This file
+/src/Azure-demo-app/                - .NET 8 Minimal API app
+/src/Azure-demo-function/          - Azure Function (log ingestion)
+/infra/                            - Terraform files (App Plan, Function App, Insights, etc.)
+.github/workflows/                 - GitHub pipelines (App + Function)
+/azure-pipelines.yml               - Azure DevOps pipeline
 ```
 
 ---
 
 ## 🛠️ Technologies Used
 
-- Azure Resource Manager (App Service, AKS, Azure SQL, VNet)
-- Terraform (Infrastructure as Code)
-- Azure DevOps Pipelines
-- GitHub Actions
-- C# (.NET 8 Minimal API)
-- Azure Service Principal (for secure authentication)
+- **Azure App Service + Function App**
+- **Terraform** (IaC for clean deployments)
+- **Azure DevOps Pipelines**
+- **GitHub Actions**
+- **Application Insights + Log Analytics**
+- **C# .NET 8 Minimal API + Azure Functions**
+- **PowerShell & Python scripts** (for health checks and alert simulations)
 
 ---
 
-## 📦 Infrastructure Deployed
+## 🔧 Infrastructure Provisioned
 
-- **Resource Group** (per environment: dev/prod)
-- **Virtual Network (VNet)** and Subnet
-- **Azure App Service Plan + Web App** (to host the .NET app)
-- **Azure Kubernetes Service (AKS)** (optional future deployment)
-- **Azure SQL Database** (optional)
-
----
-
-## 🛠️ How to Deploy Locally
-
-1. Install [Terraform CLI](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-2. Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
-3. Login to Azure:
-
-   ```bash
-   az login
-   ```
-
-4. Navigate to the `infra/` directory and run:
-
-   ```bash
-   terraform init
-   terraform plan
-   terraform apply
-   ```
-
-✅ This will create all the necessary Azure infrastructure.
+- App Service Plan + Web App (for Minimal API)
+- Linux Function App (serverless logging endpoint)
+- Azure Storage (Function App dependencies)
+- Application Insights + Log Analytics Workspace
+- Monitoring setup (availability test, alerts, traces)
 
 ---
 
-## 🔒 Secrets and Authentication
+## 🖥️ Deploying the App & Infrastructure
 
-This project uses a **Service Principal** for authentication to Azure.
+### Prerequisites:
+- [Terraform CLI](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+- Azure account with permission to create resources
 
-### Required Environment Variables:
+```bash
+az login
+cd infra/
+terraform init
+terraform apply
+```
+
+---
+
+## 🔒 Authentication & Secrets
+
+Authentication is handled using a **Service Principal** with environment variables:
 
 | Variable | Description |
-|:---------|:------------|
-| `ARM_CLIENT_ID` | Azure Service Principal App ID |
-| `ARM_CLIENT_SECRET` | Azure Service Principal Secret |
-| `ARM_SUBSCRIPTION_ID` | Azure Subscription ID |
-| `ARM_TENANT_ID` | Azure Tenant ID |
+|----------|-------------|
+| ARM_CLIENT_ID | SP App ID |
+| ARM_CLIENT_SECRET | SP Secret |
+| ARM_SUBSCRIPTION_ID | Subscription ID |
+| ARM_TENANT_ID | Tenant ID |
 
-### Where Secrets Are Stored:
-
-- **Azure DevOps:** Project Settings → Service Connections
-- **GitHub Actions:** Repository Settings → Secrets and Variables
-
----
-
-## 🔥 CI/CD Pipelines
-
-### Azure DevOps
-- Pipeline file: `azure-pipelines.yml`
-- Automatically triggered on pushes to `main`
-- Steps:
-  - `terraform init`, `terraform plan`, `terraform apply`
-  - Build .NET app
-  - Deploy app to Azure App Service
-
-### GitHub Actions
-- Workflow file: `.github/workflows/terraform.yml`
-- Automatically triggered on pushes to `main`
-- Same flow: Terraform + .NET App Deployment
+These are stored in:
+- GitHub → **Repository → Secrets**
+- Azure DevOps → **Service Connections**
 
 ---
 
-## 📈 Environment Management
+## ⚙️ CI/CD Pipelines
 
-- Separate **Resource Groups** for different environments (e.g., dev, prod)
-- **Remote backend** for Terraform state stored securely in Azure Blob Storage
-- (Optional) Use Terraform Workspaces for full environment separation
+### GitHub Actions:
+- **App**: Deploys the Minimal API to App Service
+- **Function**: Deploys the Azure Function via publish profile
+
+### Azure DevOps:
+- Full pipeline: Terraform infra + build + deploy
+- Triggered on commits to `devops` branch
+- Pushes build artifacts and deploys the web app
 
 ---
 
-## 🧐 Future Enhancements
+## 🔍 Monitoring & Automation
 
-- Add Azure Key Vault integration for secrets
-- Expand to full AKS deployment with Dockerized .NET app
-- Implement application monitoring with Azure Monitor
-- Auto-scaling setup for App Service and AKS
+- **Application Insights**: request logs, traces, exceptions
+- **Log Analytics**: custom KQL queries
+- **Alerts**: error thresholds and performance drop detection
+- **Availability Test**: pings `/hello` endpoint
+- **Custom scripts**:
+  - PowerShell: simulate errors, test alert flow
+  - Python: monitor health and call logging endpoint
+
+---
+
+## 📈 Future Additions
+
+- Auto-scaling policy
+- Azure Key Vault integration
+- Alerting via Teams or Slack
+- Container-based deployment to AKS
 
 ---
 
 ## 📜 License
 
-This project is provided for **learning**, **demonstration**, and **portfolio** purposes.
-
-Feel free to fork, modify, and use it for your own professional growth!
-
----
-
-✅ Built fully with real DevOps best practices — ready for production standards.
+This is a portfolio-ready DevOps demo project — use freely to learn or impress at your next interview!
